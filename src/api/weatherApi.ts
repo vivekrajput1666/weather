@@ -1,9 +1,5 @@
 import axios from "axios";
 
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
-});
-
 export const getCoordinates = async (city: string) => {
   const response = await axios.get(
     "https://geocoding-api.open-meteo.com/v1/search",
@@ -21,9 +17,14 @@ export const getCoordinates = async (city: string) => {
 };
 
 export const getWeather = async (latitude: number, longitude: number) => {
-  const response = await api.get("/weather", {
-    params: { latitude, longitude },
+  const response = await axios.get("https://api.open-meteo.com/v1/forecast", {
+    params: {
+      latitude,
+      longitude,
+      current: "temperature_2m,relative_humidity_2m,wind_speed_10m",
+    },
   });
 
-  return response.data;
+  // Same shape as your backend returned, so App.tsx stays unchanged
+  return { success: true, data: response.data };
 };
