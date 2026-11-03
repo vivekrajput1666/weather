@@ -62,6 +62,7 @@ function App() {
     temperature={weather.data.current.temperature_2m}
     humidity={weather.data.current.relative_humidity_2m}
     windSpeed={weather.data.current.wind_speed_10m}
+    weatherCode={weather.data.current.weather_code}
   />
 )}
       </div>
