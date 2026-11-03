@@ -5,16 +5,19 @@ import { getCoordinates, getWeather } from "./api/weatherApi";
 
 function App() {
   const [city, setCity] = useState("Jammu");
+  const[placeName, setPlaceName] = useState("");
   const [weather, setWeather] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
+let coords: Awaited<ReturnType<typeof getCoordinates>>;
   const handleSearch = async () => {
     try {
       setLoading(true);
       setError("");
       const { latitude, longitude } = await getCoordinates(city);
       const data = await getWeather(latitude, longitude);
+      coords = await getCoordinates(city);
+      setPlaceName(`${coords.name}, ${coords.country}`);
       console.log(data); // check the shape of your backend response
       setWeather(data);
     } catch (err) {
@@ -51,7 +54,7 @@ function App() {
 
         <div className="flex items-center gap-2 mb-5 text-zinc-400">
           <MapPin size={18} />
-          <p>{city}</p>
+          <p>{placeName || city}</p>
         </div>
 
         {loading && <p>Loading...</p>}
